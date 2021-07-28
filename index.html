@@ -1,0 +1,39 @@
+<html lang="en">
+<head>
+    <title>Range Slider</title>
+    <link rel="stylesheet" href="main.css">
+
+</head>
+<body>
+<div class="sidebar">
+    <div class="box">
+        <h3>Price Range Slider</h3>
+        <div class="slider" data-value-0="#first" data-value-1="#second"  data-range="#third" data-input-min="#minValue" data-input-max="#maxValue" data-min="900" data-max="17900"></div>
+        <div class="values">
+            <div>$<span id="first"></span></div>
+            <div>$<span id="second"></span></div>
+        </div>
+        <div class="sidePriceValue">
+            <div>
+                <label for="minValue">Min</label><input
+                    type="number" class="minValue" id="minValue" value="900" />
+            </div>
+            <div>
+                <label for="maxValue">Max</label><input
+                    type="number" class="maxValue" id="maxValue" value="17900" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- linkedin -->
+<a class="linkedin" href="https://www.linkedin.com/in/oguzhanozcelik/" target="_blank"><img
+        src="https://image.flaticon.com/icons/png/512/174/174857.png" alt=""></a>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenMax.min.js"></script>
+<script src="main.js"></script>
+</html>
