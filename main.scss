@@ -1,253 +1,187 @@
-{%- liquid 
-  assign se_id = section.id
-  assign se_bks = section.blocks
-  assign se_stts = section.settings
-  assign parallax = se_stts.parallax 
-  assign image = se_stts.image
-  case request.page_type
-    when 'customers/login'
-      if settings.lr_enable
-        assign title = 'customer.account.title' | t
-      else
-        assign title = 'customer.login.title' | t
-      endif
-    when 'customers/register'
-      assign title = 'customer.register.title' | t
-    when 'customers/activate_account'
-      assign title = 'customer.activate_account.title' | t
-    when 'customers/reset_password'
-      assign title = 'customer.reset_password.title' | t
-    else
-      assign title = 'customer.account.title' | t
-  endcase -%}
-  
-{%- capture bk_contents -%}
-  {%- if se_bks.size > 0 -%}
-     <div class="container pr z_100">
-        {%- for block in se_bks -%}
-        {%- case block.type -%}
-           {%- when '1' -%}<h1 class="tu mb__10 cw">{{title}}</h1>
-           {%- else -%}{% if block.settings.text == blank %}{% continue %}{% endif %}<p class="mg__0">{{ block.settings.text }}</p>
-        {%- endcase -%}
-        {%- endfor -%}
-     </div>
-  {%- endif -%}
-{%- endcapture -%}
-
-{%- if image != blank -%}
-  <div class="page-head tc pr oh page_bg_img page_head_{{se_id}}">
-     <div class="parallax-inner nt_parallax_{{parallax}} lazyload nt_bg_lz pa t__0 l__0 r__0 b__0" data-bgset="{{ image | img_url: '1x1' }}" data-ratio="{{image.aspect_ratio}}" data-sizes="auto" data-parent-fit="cover"></div>
-     {{-bk_contents-}}
-  </div>
-{%- else -%}
-  <div class="page-head tc pr oh page_head_{{se_id}}">{{bk_contents}}</div>
-{%- endif -%}
-
-{%- style -%}
-.page_head_{{se_id}} {padding: {{se_stts.padding}}px 0}
-.page_head_{{se_id}}:before {
-  background-color: {{se_stts.color}};opacity: {{se_stts.overlay | divided_by: 100.0}}
+body.ui-slider-active {
+  cursor: -webkit-grabbing;
+  cursor: grabbing;
 }
-{%- unless parallax -%}
-.page_head_{{se_id}} .parallax-inner {
-     background-repeat: {{se_stts.bg_repeat}};
-    background-size: {{se_stts.bg_size}};
-    background-attachment: {{se_stts.bg_att}};
-    background-position: {{se_stts.bg_pos | replace: '_', ' ' }};
-}
-{%- endunless -%}
-{%- endstyle -%}
-{%- schema -%}
-  {
-    "name": "Page heading",
-    "class": "page_section_heading",
-    "settings": [
-      {
-        "type": "image_picker",
-        "id": "image",
-        "label": "== Background Image"
-      },
-      {
-        "type": "checkbox",
-        "id": "parallax",
-        "label": "Use scroll parallax?",
-        "default": false
-      },
-      {
-        "type": "color",
-        "id": "color",
-        "label": "Background color",
-        "default": "#000"
-      },
-      {
-        "type": "range",
-        "id": "overlay",
-        "label": "Background overlay",
-        "default": 54,
-        "min": 0,
-        "max": 100,
-        "step": 1,
-        "unit": "%"
-      },
-      {
-        "type": "range",
-        "id": "padding",
-        "label": "Padding Space",
-        "default": 50,
-        "min": 10,
-        "max": 100,
-        "step": 1,
-        "unit": "px"
-      },
-      {
-        "type": "header",
-        "content": "== Background Image Config:"
-      },
-      {
-        "type": "paragraph",
-        "content": "Not active when you enable scroll parallax."
-      },
-      {
-        "type": "select",
-        "id": "bg_pos",
-        "label": "Background Image Position",
-        "default": "center center",
-        "options": [
-          {
-            "value": "left top",
-            "label": "Left Top"
-          },
-          {
-            "value": "left center",
-            "label": "Left Center"
-          },
-          {
-            "value": "left bottom",
-            "label": "Left Bottom"
-          },
-          {
-            "value": "center top",
-            "label": "Center Top"
-          },
-          {
-            "value": "center center",
-            "label": "Center Center"
-          },
-          {
-            "value": "center bottom",
-            "label": "Center Bottom"
-          },
-          {
-            "value": "right top",
-            "label": "Right Top"
-          },
-          {
-            "value": "right center",
-            "label": "Right Center"
-          },
-          {
-            "value": "right bottom",
-            "label": "Right Bottom"
-          }
-        ]
-      },
-      {
-        "type": "select",
-        "id": "bg_repeat",
-        "options": [
-          {
-            "value": "no-repeat",
-            "label": "No Repeat"
-          },
-          {
-            "value": "repeat",
-            "label": "Repeat All"
-          },
-          {
-            "value": "repeat-x",
-            "label": "Repeat Horizontally"
-          },
-          {
-            "value": "repeat-y",
-            "label": "Repeat Vertically"
-          },
-          {
-            "value": "inherit",
-            "label": "Inherit"
-          }
-        ],
-        "label": "___ Background Repeat",
-        "default": "no-repeat",
-        "info": "[Specifies how to repeat the background images](https:\/\/w3schools.com\/cssref\/pr_background-repeat.asp)"
-      },
-      {
-        "type": "select",
-        "id": "bg_size",
-        "options": [
-          {
-            "value": "auto",
-            "label": "Auto"
-          },
-          {
-            "value": "inherit",
-            "label": "Inherit"
-          },
-          {
-            "value": "cover",
-            "label": "Cover"
-          },
-          {
-            "value": "contain",
-            "label": "Contain"
-          }
-        ],
-        "label": "___ Background Size",
-        "default": "cover",
-        "info": "[Specifies the size of the background images](https:\/\/w3schools.com\/cssref\/css3_pr_background-size.asp)"
-      },
-      {
-        "type": "select",
-        "id": "bg_att",
-        "options": [
-          {
-            "value": "fixed",
-            "label": "Fixed"
-          },
-          {
-            "value": "scroll",
-            "label": "Scroll"
-          },
-          {
-            "value": "inherit",
-            "label": "Inherit"
-          }
-        ],
-        "label": "___ Background Attachment",
-        "default": "scroll",
-        "info": "[Specifies whether the background images are fixed or scrolls with the rest of the page](https:\/\/w3schools.com\/cssref\/pr_background-attachment.asp)"
+.sidebar {
+  width: 412px;
+  .box {
+    .sidePriceValue {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin-top: 10px;
+      div {
+        display: flex;
+        flex-direction: column;
+        label {
+          font-weight: bold;
+        }
       }
-    ],
-    "blocks": [
-      {
-        "type": "1",
-        "name": "Title",
-        "limit": 1
-      },
-      {
-        "type": "2",
-        "name": "Description",
-        "limit": 1,
-        "settings": [
-         {
-          "type":"richtext","id":"text","label":"Content","default":"<p>Follow your passion, and sucess will follow you</p>"
-          }
-        ]
-      }
-    ],
-    "default": {
-      "blocks": [
-        { "type": "1" }
-      ]
     }
   }
-{% endschema %}
+}
+.box {
+  --primary: #000;
+  --headline: #b52735;
+  --text: #99a3ba;
+  width: 100%;
+  max-width: 100%;
+  padding: 36px 32px 48px 32px;
+  background: #fff;
+  border-radius: 9px;
+  box-shadow: 0 1px 4px rgba(18, 22, 33, 0.12);
+  h3 {
+    font-family: inherit;
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0 0 20px 0;
+    color: var(--headline);
+    span {
+      font-weight: 500;
+    }
+  }
+  .values {
+    div {
+      display: inline-block;
+      vertical-align: top;
+    }
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 10px 0 0 0;
+    font-weight: 500;
+    color: var(--primary);
+    >div {
+      &:first-child {
+        margin-right: 2px;
+      }
+      &:last-child {
+        margin-left: 2px;
+      }
+    }
+  }
+  small {
+    div {
+      display: inline-block;
+      vertical-align: top;
+    }
+    color: var(--text);
+    display: block;
+    margin-top: 8px;
+    font-size: 14px;
+  }
+  .slider {
+    margin-top: 40px;
+  }
+}
+.slider {
+  --primary: #000;
+  --handle: #fff;
+  --handle-active: #4d4d4d;
+  --handle-hover: #0d0d0d;
+  --handle-border: 2px solid var(--primary);
+  --line: #cdd9ed;
+  --line-active: var(--primary);
+  height: 23px;
+  width: 100%;
+  position: relative;
+  pointer-events: none;
+  .ui-slider-handle {
+    --y: 0;
+    --background: var(--handle);
+    cursor: -webkit-grab;
+    cursor: grab;
+    -webkit-tap-highlight-color: transparent;
+    top: 0;
+    width: 23px;
+    height: 23px;
+    transform: translateX(-50%);
+    position: absolute;
+    outline: none;
+    display: block;
+    pointer-events: auto;
+    div {
+      width: 23px;
+      height: 23px;
+      border-radius: 50%;
+      transition: background 0.4s ease;
+      transform: translateY(calc(var(--y) * 1px));
+      border: var(--handle-border);
+      background: var(--background);
+    }
+    &:hover {
+      --background: var(--handle-hover);
+    }
+    &:active {
+      --background: var(--handle-active);
+      cursor: -webkit-grabbing;
+      cursor: grabbing;
+    }
+  }
+  svg {
+    --stroke: var(--line);
+    display: block;
+    height: 83px;
+    path {
+      fill: none;
+      stroke: var(--stroke);
+      stroke-width: 1;
+    }
+  }
+  .active {
+    position: absolute;
+    top: -30px;
+    height: 83px;
+    position: absolute;
+    overflow: hidden;
+    left: calc(var(--l) * 1px);
+    right: calc(var(--r) * 1px);
+    svg {
+      --stroke: var(--line-active);
+      position: relative;
+      left: calc(var(--l) * -1px);
+      right: calc(var(--r) * -1px);
+      path {
+        stroke-width: 2;
+      }
+    }
+  }
+  >svg {
+    position: absolute;
+    top: -30px;
+    height: 83px;
+    left: 0;
+    width: 100%;
+  }
+}
+html {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+* {
+  box-sizing: inherit;
+  &:before {
+    box-sizing: inherit;
+  }
+  &:after {
+    box-sizing: inherit;
+  }
+}
+body {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Roboto", Arial;
+  background: #cdd9ed;
+  .linkedin {
+    position: fixed;
+    display: block;
+    right: 20px;
+    bottom: 20px;
+    img {
+      display: block;
+      height: 28px;
+    }
+  }
+}
